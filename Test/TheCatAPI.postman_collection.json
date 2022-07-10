@@ -25,7 +25,7 @@
 									"    pm.response.to.not.have.jsonBody(\"error\"); ",
 									"});",
 									"",
-									"postman.setNextRequest(\"nextRequest\");",
+									"// postman.setNextRequest(\"nextRequest\");",
 									"",
 									"// console.log(pm.info.requestId);",
 									"// pm.environment.set(\"requestID\", pm.info.requestId);",
