@@ -1,2 +1,4 @@
 # REST_API
-REST API test
+
+The public REST API for pratice.
+Web: https://thecatapi.com/
