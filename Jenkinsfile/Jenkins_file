@@ -44,9 +44,6 @@ spec:
         
         RequestTimeOut = 30000
         ReporterJUnit = "junit"
-        Collection = "${WORKSPACE}/Test/TheCatAPI.postman_collection.json"
-        Environment = "${WORKSPACE}/Test/TheCatAPI.postman_environment.json"
-        Report = "${WORKSPACE}/newman_results/Result.xml"
 		numberOfIteration = 1
 
     }
@@ -63,8 +60,8 @@ spec:
                         try {
                             echo "Test suite is executing..."
                             sh """
-                            cat ${Environment}
-                            newman run ${REST_Collection} -e ${REST_Environment} -n ${numberOfIteration} --insecure --timeout-request ${RequestTimeOut} --reporters cli,${ReporterJUnit} --reporter-${ReporterJUnit}-export ${REST_Report}
+                            mkdir -p ${WORKSPACE}/newman_results
+                            newman run ${WORKSPACE}/Test/TheCatAPI.postman_collection.json -e ${WORKSPACE}/Test/TheCatAPI.postman_environment.json -n ${numberOfIteration} --insecure --timeout-request ${RequestTimeOut} --reporters cli,${ReporterJUnit} --reporter-${ReporterJUnit}-export ${WORKSPACE}/newman_results/Result.xml
                             """
                             echo "Test suite is done..."
                         }
@@ -82,7 +79,7 @@ spec:
 
         stage("Report Junit") {
             steps {
-                junit allowEmptyResults: true, testResults: 'newman_results/PA_REST-results.xml'
+                junit allowEmptyResults: true, testResults: 'newman_results/Result.xml'
             }
         }
     }
