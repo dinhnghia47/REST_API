@@ -43,7 +43,7 @@ spec:
     environment {
         
         RequestTimeOut = 30000
-        ReporterJUnit = "junit"
+        ReporterJUnit = "htmlextra"
 		numberOfIteration = 1
 
     }
@@ -61,7 +61,7 @@ spec:
                             echo "Test suite is executing..."
                             sh """
                             mkdir -p ${WORKSPACE}/newman_results
-                            newman run ${WORKSPACE}/Test/TheCatAPI.postman_collection.json -e ${WORKSPACE}/Test/TheCatAPI.postman_environment.json -n ${numberOfIteration} --insecure --timeout-request ${RequestTimeOut} --reporters cli,${ReporterJUnit} --reporter-${ReporterJUnit}-export ${WORKSPACE}/newman_results/Result.xml
+                            newman run ${WORKSPACE}/Test/TheCatAPI.postman_collection.json -e ${WORKSPACE}/Test/TheCatAPI.postman_environment.json -n ${numberOfIteration} --insecure --timeout-request ${RequestTimeOut} --reporters cli,${ReporterJUnit} --reporter-${ReporterJUnit}-export ${WORKSPACE}/newman_results/Result.html
                             """
                             echo "Test suite is done..."
                         }
@@ -77,9 +77,9 @@ spec:
             }
         }
 
-        stage("Report Junit") {
+        stage("Report html") {
             steps {
-                junit allowEmptyResults: true, testResults: 'newman_results/Result.xml'
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'newman_results/', reportFiles: 'Result.html', reportName: 'REST API Report', reportTitles: ''])
             }
         }
     }
