@@ -84,7 +84,7 @@ spec:
         // }
 		stage("Report Junit") {
             steps {
-                junit allowEmptyResults: true, testResults: 'newman_results/PA_REST-results.xml'
+                junit allowEmptyResults: true, testResults: 'newman_results/Result.xml'
             }
         }
     }
