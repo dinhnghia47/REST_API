@@ -43,7 +43,7 @@ spec:
     environment {
         
         RequestTimeOut = 30000
-        ReporterJUnit = "junitfull"
+        ReporterJUnit = "junit"
 		numberOfIteration = 1
 
     }
