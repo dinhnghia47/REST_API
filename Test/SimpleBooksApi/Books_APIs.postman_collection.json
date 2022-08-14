@@ -7,12 +7,41 @@
 	"item": [
 		{
 			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be okay to process\", function () { \r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response contains the accessToken\", function () { \r",
+							"    pm.expect(pm.response.text()).to.include(\"accessToken\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"clientName\": \"ndn\",\r\n   \"clientEmail\": \"abc@gmail.com\"\r\n}",
+					"raw": "{\r\n   \"clientName\": \"ndn\",\r\n   \"clientEmail\": \"{{emailName}}@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,12 +49,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/api-clients/",
-					"protocol": "https",
+					"raw": "{{baseURL}}/api-clients/",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"api-clients",
@@ -37,16 +63,35 @@
 		},
 		{
 			"name": "Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status is 'OK'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"status\\\":\\\"OK\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/status",
-					"protocol": "https",
+					"raw": "{{baseURL}}/status",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"status"
@@ -56,20 +101,39 @@
 			"response": []
 		},
 		{
-			"name": "Get books",
+			"name": "Get books (fiction)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body not contain type = non-fiction\", function () {\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"type\\\": \\\"non-fiction\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/books?type=fiction&limit=20",
-					"protocol": "https",
+					"raw": "{{baseURL}}/books?type=fiction&limit=20",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
-						"",
 						"books"
 					],
 					"query": [
@@ -89,17 +153,100 @@
 			"response": []
 		},
 		{
-			"name": "Get book detail via id",
+			"name": "Get books (non-fiction)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body not contain type = fiction\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"non-fiction\\\"\");\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/books/:bookId",
-					"protocol": "https",
+					"raw": "{{baseURL}}/books?type=non-fiction&limit=20",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "non-fiction",
+							"description": "fiction or non-fiction (optional)"
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "optional"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book detail via id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response details for book id = 1\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":1\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"name:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"author:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"isbn:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"type:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"price:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"current-stock:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"available:\\\"\");\r",
+							"});\r",
+							"\r",
+							"var isAvailable = pm.response.json().available;\r",
+							"if (isAvailable == false){\r",
+							"    postman.setNextRequest(null);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/books/:bookId",
+					"host": [
+						"{{baseURL}}"
 					],
 					"path": [
 						"books",
@@ -108,7 +255,7 @@
 					"variable": [
 						{
 							"key": "bookId",
-							"value": ""
+							"value": "1"
 						}
 					]
 				}
@@ -117,13 +264,34 @@
 		},
 		{
 			"name": "Oders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderId = pm.response.json().orderId;\r",
+							"pm.environment.set(\"orderId\", orderId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5facf6731b2c7a1483b94fc3707291140b5549f4f84f3f7e79107caf390d76f2",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -132,7 +300,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"bookId\": 1,\r\n  \"customerName\": \"John\"\r\n}",
+					"raw": "{\r\n  \"bookId\": 1,\r\n  \"customerName\": \"ndn\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -140,12 +308,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/orders",
-					"protocol": "https",
+					"raw": "{{baseURL}}/orders",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"orders"
@@ -156,13 +321,37 @@
 		},
 		{
 			"name": "Get Oders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Response body includes order id\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5facf6731b2c7a1483b94fc3707291140b5549f4f84f3f7e79107caf390d76f2",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -170,12 +359,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/orders",
-					"protocol": "https",
+					"raw": "{{baseURL}}/orders",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"orders"
@@ -186,13 +372,37 @@
 		},
 		{
 			"name": "Get Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Response body includes order id\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"customerName\\\":\\\"ndn\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5facf6731b2c7a1483b94fc3707291140b5549f4f84f3f7e79107caf390d76f2",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -200,12 +410,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/orders/:orderId",
-					"protocol": "https",
+					"raw": "{{baseURL}}/orders/:orderId",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"orders",
@@ -214,7 +421,7 @@
 					"variable": [
 						{
 							"key": "orderId",
-							"value": ""
+							"value": "{{orderId}}"
 						}
 					]
 				}
@@ -223,13 +430,31 @@
 		},
 		{
 			"name": "Update Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5facf6731b2c7a1483b94fc3707291140b5549f4f84f3f7e79107caf390d76f2",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -246,12 +471,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/orders/:orderId",
-					"protocol": "https",
+					"raw": "{{baseURL}}/orders/:orderId",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"orders",
@@ -260,7 +482,65 @@
 					"variable": [
 						{
 							"key": "orderId",
-							"value": "LPw0bg2JOQAWfcHMzwgY3"
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders id (update)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Order id was updated successfully\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"customerName\\\":\\\"abc\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
 						}
 					]
 				}
@@ -269,13 +549,31 @@
 		},
 		{
 			"name": "Delete Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5facf6731b2c7a1483b94fc3707291140b5549f4f84f3f7e79107caf390d76f2",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -283,12 +581,9 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://simple-books-api.glitch.me/orders/:orderId",
-					"protocol": "https",
+					"raw": "{{baseURL}}/orders/:orderId",
 					"host": [
-						"simple-books-api",
-						"glitch",
-						"me"
+						"{{baseURL}}"
 					],
 					"path": [
 						"orders",
@@ -297,7 +592,64 @@
 					"variable": [
 						{
 							"key": "orderId",
-							"value": "LPw0bg2JOQAWfcHMzwgY3"
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders id (delete)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Order id was deleted successfully\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
 						}
 					]
 				}

@@ -3,112 +3,118 @@ Simple Books API
 This API allows you to reserve a book.
 
 The API is available at https://simple-books-api.glitch.me
-Endpoints
+
+
 Status
 
-GET /status
+	GET /status
 
-Returns the status of the API.
+	Returns the status of the API.
+
 List of books
 
-GET /books
+	GET /books
 
-Returns a list of books.
+	Returns a list of books.
 
-Optional query parameters:
+	Optional query parameters:
 
-    type: fiction or non-fiction
-    limit: a number between 1 and 20.
+		type: fiction or non-fiction
+		limit: a number between 1 and 20.
 
-Get a single book
+	Get a single book
 
-GET /books/:bookId
+	GET /books/:bookId
 
-Retrieve detailed information about a book.
+	Retrieve detailed information about a book.
+
 Submit an order
 
-POST /orders
+	POST /orders
 
-Allows you to submit a new order. Requires authentication.
+	Allows you to submit a new order. Requires authentication.
 
-The request body needs to be in JSON format and include the following properties:
+	The request body needs to be in JSON format and include the following properties:
 
-    bookId - Integer - Required
-    customerName - String - Required
+		bookId - Integer - Required
+		customerName - String - Required
 
-Example
+	Example
 
-POST /orders/
-Authorization: Bearer <YOUR TOKEN>
+	POST /orders/
+	Authorization: Bearer <YOUR TOKEN>
 
-{
-  "bookId": 1,
-  "customerName": "John"
-}
+	{
+	  "bookId": 1,
+	  "customerName": "John"
+	}
 
-The response body will contain the order Id.
+	The response body will contain the order Id.
+
 Get all orders
 
-GET /orders
+	GET /orders
 
-Allows you to view all orders. Requires authentication.
+	Allows you to view all orders. Requires authentication.
+
 Get an order
 
-GET /orders/:orderId
+	GET /orders/:orderId
 
-Allows you to view an existing order. Requires authentication.
+	Allows you to view an existing order. Requires authentication.
+
 Update an order
 
-PATCH /orders/:orderId
+	PATCH /orders/:orderId
 
-Update an existing order. Requires authentication.
+	Update an existing order. Requires authentication.
 
-The request body needs to be in JSON format and allows you to update the following properties:
+	The request body needs to be in JSON format and allows you to update the following properties:
 
-    customerName - String
+		customerName - String
 
-Example
+	Example
 
-PATCH /orders/PF6MflPDcuhWobZcgmJy5
-Authorization: Bearer <YOUR TOKEN>
+	PATCH /orders/PF6MflPDcuhWobZcgmJy5
+	Authorization: Bearer <YOUR TOKEN>
 
-{
-  "customerName": "John"
-}
+	{
+	  "customerName": "John"
+	}
 
 Delete an order
 
-DELETE /orders/:orderId
+	DELETE /orders/:orderId
 
-Delete an existing order. Requires authentication.
+	Delete an existing order. Requires authentication.
 
-The request body needs to be empty.
+	The request body needs to be empty.
 
-Example
+	Example
 
-DELETE /orders/PF6MflPDcuhWobZcgmJy5
-Authorization: Bearer <YOUR TOKEN>
+	DELETE /orders/PF6MflPDcuhWobZcgmJy5
+	Authorization: Bearer <YOUR TOKEN>
 
 API Authentication
 
-To submit or view an order, you need to register your API client.
+	To submit or view an order, you need to register your API client.
 
-POST /api-clients/
+	POST /api-clients/
 
-The request body needs to be in JSON format and include the following properties:
+	The request body needs to be in JSON format and include the following properties:
 
-    clientName - String
-    clientEmail - String
+		clientName - String
+		clientEmail - String
 
-Example
+	Example
 
-{
-   "clientName": "Postman",
-   "clientEmail": "valentin@example.com"
-}
+	{
+	   "clientName": "Postman",
+	   "clientEmail": "valentin@example.com"
+	}
 
-The response body will contain the access token. The access token is valid for 7 days.
+	The response body will contain the access token. The access token is valid for 7 days.
 
-Possible errors
+	Possible errors
 
-Status code 409 - "API client already registered." Try changing the values for clientEmail and clientName to something else.
+	Status code 409 - "API client already registered." Try changing the values for clientEmail and clientName to something else.
