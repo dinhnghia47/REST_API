@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "f11692be-03d5-4f21-b872-5e205b7dbcb4",
+		"name": "Books_APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be okay to process\", function () { \r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response contains the accessToken\", function () { \r",
+							"    pm.expect(pm.response.text()).to.include(\"accessToken\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"clientName\": \"ndn\",\r\n   \"clientEmail\": \"{{emailName}}@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api-clients/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api-clients",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status is 'OK'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"status\\\":\\\"OK\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/status",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get books (fiction)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body not contain type = non-fiction\", function () {\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"type\\\": \\\"non-fiction\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/books?type=fiction&limit=20",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "fiction",
+							"description": "fiction or non-fiction (optional)"
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "optional"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get books (non-fiction)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body not contain type = fiction\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"non-fiction\\\"\");\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/books?type=non-fiction&limit=20",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "non-fiction",
+							"description": "fiction or non-fiction (optional)"
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "optional"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book detail via id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response details for book id = 1\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":1\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"name:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"author:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"isbn:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"type:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"price:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"current-stock:\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"available:\\\"\");\r",
+							"});\r",
+							"\r",
+							"var isAvailable = pm.response.json().available;\r",
+							"if (isAvailable == false){\r",
+							"    postman.setNextRequest(null);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/books/:bookId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"books",
+						":bookId"
+					],
+					"variable": [
+						{
+							"key": "bookId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Oders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderId = pm.response.json().orderId;\r",
+							"pm.environment.set(\"orderId\", orderId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"bookId\": 1,\r\n  \"customerName\": \"ndn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/orders",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Response body includes order id\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"\\\"type\\\":\\\"fiction\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Response body includes order id\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"customerName\\\":\\\"ndn\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerName\": \"abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders id (update)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Order id was updated successfully\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"\\\"customerName\\\":\\\"abc\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Oders id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Oders id (delete)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"var orderID = pm.environment.get(\"orderId\");\r",
+							"pm.test(\"Order id was deleted successfully\" + orderID, function () {\r",
+							"    pm.expect(pm.response.text()).not.include(\"\\\"id\\\":\\\"\"+orderID+\"\\\"\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/orders/:orderId",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "orderId"
+		}
+	]
+}
