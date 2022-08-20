@@ -19,7 +19,7 @@ pipeline {
             steps {
 				sh label: 'Newman Execution', script: '''
 					mkdir report
-					newman run Test\SimpleBooksApi\Books_APIs.postman_collection.json -e Test\SimpleBooksApi\Books_APIs.postman_environment.json --reporters junit --reporter-junit-export report\report.xml
+					newman run Test/SimpleBooksApi/Books_APIs.postman_collection.json -e Test/SimpleBooksApi/Books_APIs.postman_environment.json --reporters junit --reporter-junit-export report/report.xml
 				'''.stripIndent()
             }
             post {
@@ -27,7 +27,7 @@ pipeline {
                     script {
                         println " **** Publish test results **** "
                         archiveArtifacts artifacts: 'report/report.xml', fingerprint: true
-                        junit allowEmptyResults: true, testResults:'report\report.xml'
+                        junit allowEmptyResults: true, testResults:'report/report.xml'
                       	cleanWs()
                     }
                 }
