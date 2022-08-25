@@ -1,66 +1,11 @@
 {
 	"info": {
-		"_postman_id": "f11692be-03d5-4f21-b872-5e205b7dbcb4",
+		"_postman_id": "9ba4800d-d31c-482c-b679-5568419b2931",
 		"name": "Books_APIs",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22876960"
 	},
 	"item": [
-		{
-			"name": "Register",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Response code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"var getTime = pm.environment.get(\"Response_Time\");\r",
-							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response should be okay to process\", function () { \r",
-							"    pm.response.to.not.be.error;\r",
-							"    pm.response.to.not.have.jsonBody(\"error\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"response contains the accessToken\", function () { \r",
-							"    pm.expect(pm.response.text()).to.include(\"accessToken\");\r",
-							"});\r",
-							"\r",
-							"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"clientName\": \"ndn\",\r\n   \"clientEmail\": \"{{emailName}}@gmail.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseURL}}/api-clients/",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"api-clients",
-						""
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "Status",
 			"event": [
@@ -257,6 +202,62 @@
 							"key": "bookId",
 							"value": "1"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var getTime = pm.environment.get(\"Response_Time\");\r",
+							"pm.test(\"Response time is less than \" + getTime.toString()+\"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(parseInt(getTime));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be okay to process\", function () { \r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response contains the accessToken\", function () { \r",
+							"    pm.expect(pm.response.text()).to.include(\"accessToken\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"clientName\": \"ndn\",\r\n   \"clientEmail\": \"{{emailName}}@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api-clients/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api-clients",
+						""
 					]
 				}
 			},
