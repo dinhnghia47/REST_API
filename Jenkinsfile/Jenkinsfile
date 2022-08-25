@@ -17,7 +17,7 @@ pipeline {
             }
             steps {
 				sh label: 'Newman Execution', script: '''
-					mkdir report
+					#mkdir report
 					newman run Test/SimpleBooksApi/Books_APIs.postman_collection.json -e Test/SimpleBooksApi/Books_APIs.postman_environment.json --reporters cli,junit --reporter-junit-export report/report.xml
 				'''.stripIndent()
             }
